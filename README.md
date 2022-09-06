@@ -11,10 +11,6 @@ function ensureNonEmpty<StringGeneric extends string>(inputString: NonEmptyStrin
     }
     return inputString;
 }
-
-const couldBeEmpty: string = '';
-const definitelyNotEmpty1 = ensureNonEmpty('');
-const definitelyNotEmpty2 = ensureNonEmpty('not empty');
 ```
 
 [see in playground](https://www.typescriptlang.org/play?#code/C4TwDgpgBAcg9gOwKIFsygMrAE4EsEDmAPEgB4CGAxsFnoQOIQIR6VQSnBMAmAzlLxz4CAPigBeKGSo0hDJi1xsOXBHygByDVAD8UZgDcWALikVqtYY2asA3ACh7AMwCuCarkTsEvF9gjwyGigRJbyNkrsnDz8gnSiABT4YC6y8aaBqOggYcS51oqUIgCUpvkKrFAA3vZQdVC4TlAJAITJqbnF1bX1vcAAFthwAO76EKNI2EPYCQAGZJDUENxQ5PqIALQQwSACcgQAdLPFDr0Avj11-sB+CA0IKWnCDhf2lIiCUO8uADbcAEIQLKgUxxYQSTQaBzvHzAKDcCBOfC4Lg-EDwYDAkAARghTF8-kyOwSWhObw+cIRSIQKIgaIxWIATHifH4AogsSSEHA4dtshoTkA)
