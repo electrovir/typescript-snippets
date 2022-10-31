@@ -4,7 +4,7 @@
 
 This creates an array of an object's nested keys where each entry in the array determines which entries may follow. The first entry is the object's top level keys, the second entry is the object's nested keys of the value given in the first entry, and so on.
 
-So, [for example](https://www.typescriptlang.org/play?#code/C4TwDgpgBA8gRgKwgY2ANQIYBsCuEAq4EAPPlBAB7AQB2AJgM5QD2iKwAfFALxT4DaAawghmAMz4BdANwAoWaEhQAchAbU6AaRENi8JKgDitCACcAlsnJVajFm1Rde+9plwEixAN6yofqPwACqbMYFDmNFDCohIuRiYWyJIAXLAOwMY0ZpZBIWCS1tT0TKwGwL7+lQD8AcGhADRQAHQtABSq6hBaOnrpmdnIuaGSXAA+AZIAlJIVlX6pQ-lyAL4ccgpE1hgAtmBYEHHAhEq8XsxZqeoWNADmjcAA7sypXlmddJfA1zfLy+vI53UUGo6gYqQAShAMHRzlgQABBUymDAgYgdDTaEC6Sg7PYHdLHCAcJwBWYBADk5wg5Mk9TJ-HJj2YNLplQZTPJjXJbw0LLJAHp+VAAALABgAWkokFQkqRzFM9MpWU5UCV1NpAqFoolUvYspCCrZapVjKefMqgpFYslFGlwH18sVVJNGBoICgVwiN3N-kt2ptdodhv87LNXOdGotWutuplZgNio5XI5kd90Z1tr18cdRqTqp5XRNKbpMlkQA), with the object type `{one: string, two: {nested: string}}`, the only possible values for this nested key array are the following:
+So, for example, with the object type `{one: string, two: {nested: string}}`, the only possible values for this nested key array are the following:
   - `['one']`
   - `['two']`
   - `['two', 'nested']`
