@@ -21,6 +21,29 @@ type NestedKeys<ObjectGeneric extends object> = ObjectValueType<{
 
 [Playground example](https://www.typescriptlang.org/play?#code/C4TwDgpgBA8gRgKwgY2ANQIYBsCuEAq4EAPPlBAB7AQB2AJgM5QD2iKwAfFALxT4DaAawghmAMz4BdANwAoWaEhQAchAbU6AaRENi8JKgDitCACcAlsnJVajFm1Rde+9plwEixAN6yofqPwACqbMYFDmNFDCohIuRiYWyJIAXLAOwMY0ZpZBIWCS1tT0TKwGwL7+lQD8AcGhADRQAHQtABSq6hBaOnrpmdnIuaGSXAA+AZIAlJIVlX6pQ-lyAL4ccgpE1hgAtmBYEHHAhEq8PpXAoQAyEABuEFipODSCNMwA7jRylcxZ13dYABEIBAwKkznM-AwIgBzfYdDR1UFQJ4vd6fWZQZZffzAAAWpmBf3uDCBILBGMqWU6dBgWXJEIhVI0+DezHpDI5TK6+HxwPZHIFUDAeVpEEez1eH2xgo5wtCLLZyIlaOlMr8WIpDI1HO1-g1GtkyB+6ig1HUDFSACUIBg6D8sCAAIKmUwYEDEeFdbQgXSUHZ7A7pY4QDhOAIY-gAcguYCJWEjknqEcjPwgcdJYATScq-E1fhTv1u9wzkezDIA9OWoAABYAMAC0lEgqEbLuYpjzUALaaLgOBmbLfkTEc73fT-dLncrNbrjYozeArZCHY50auvcnlWHOdHqfHIM3DMjUJosIgnroiMPQ8HUGntYbTfYS-bI9Xe97JdvlUjXJpWWvKBt38XNVzxAke3+EkJ1vYC-FAo9wMJXtoIPb9-F-NQNFFQC4PDMDeUg4kvynKsHznBcXxXI8-wVXDbwQiFo0IuNUIHUc-xw9D81o1lAJ-WjCP4jC5TALiMTwxi5mYiDWJI1dOIA7iu145hhJ4rDuSE5TI1EujYIY0ckKIrA2PUlTNP-CBzMw6l9I4yyeQg8z71nJ8WzMZdRzoMx2K3W9XMfedn0818dwI2SUPko8TzPC8rx01SbME5yDNkGRZCAA)
 
+### Extracting a value from NestedKeys
+
+Combined with the above `NestedKeys` type, it is possible to then extract the _exactly specific type_ inside an object with a given `NestedKeys` instance.
+
+```typescript
+export type NestedValue<
+    ObjectGeneric extends object,
+    NestedKeysGeneric extends NestedKeys<ObjectGeneric>,
+> = NestedKeysGeneric extends [infer FirstEntry, ...infer FollowingEntries]
+    ? FirstEntry extends keyof ObjectGeneric
+        ? FollowingEntries extends never[]
+            ? ObjectGeneric[FirstEntry]
+            : ObjectGeneric[FirstEntry] extends object
+            ? FollowingEntries extends NestedKeys<ObjectGeneric[FirstEntry]>
+                ? NestedValue<ObjectGeneric[FirstEntry], FollowingEntries>
+                : never
+            : never
+        : never
+    : never;
+```
+
+[Playground example](https://www.typescriptlang.org/play?#code/KYDwDg9gTgLgBDAnmYcBywDONgBMBqAhgDYCuwAPAFBy1wDyARgFbADGMA4sAHbBQBLNnFA4euTHAgt2MADQ06GbHgDSwRJm59Bw0bwnosOXOs0UmrDtv5CAfArtwAvEZWmNW3rb0gxhgG0BHgAzfjgAMQEobABRHhgoRDk4ADp04LCoSIhiYggAd2CAc3jEgSwAXUVaAH5I6LiEpJE-A0kAaw0IEIYZa29dGro6nLzCkrLBLFb-ST4AN34A6pG1unrLWRtdAKiYmCnEVfW1gC4+qy5BoT3Gw+bj2fapfphh07h6iNz8op5Ss0KpJ9OJJMoTGZMBY3jtbvsmoljnYPp8Nm4TEQyJQtgMdPD7kdKikfuN-oDylgUWjThdFvxUes6cAllBGXBmazhpz+ABuKhUJAoS6yLHkAAqyEo4ueYNeVycrnFAS6iB6cHFlX5gqlGLUnhhVzhvjm8tkipFHDFwElKAoAG9hgEAApQCBgODBOCq9W4674tiVC5+40ut1gSqywzSK7s+ph90pdKpAAUEP15hDNzYCYjTgAPnAVgBKE5Mouu91aqgAXzs2qFqFAhAAtmBiMA-bbUK5HSMYO6ADIs4DEC7YQQA-kjCB8YdLYgAEWAwDAFz7p0wJQ76dwlbXcB4pBbjD5wxr07oMAAFlAV-PR5hl6v1+y+O56HxXzTaO+TOKCggb8fxGP88HFW8V2AkD1jAcNP2AC4ACVgFKcBLxgtY4PdACgLgRdCBwDCYIvdkRlIz4KLoUjSIFNhZ2wOAJxKa1x3KAEXDge0azgQhwWMPBrQoZs2w7LspRSAJhgAcgHMAH2IaSqEqesqHonhGNwQjgFY-DtM47jeP49whJE9tOzebtJJkm872ABSnxXMBpIUEZpLA3AEJcmSPNw7y3N8yDgH8uhpOwsA-IUFT+QAehiuAAAEYEwABaUAUA4NKoDdNl1MYgo3QBABBTAt2KHgW14GALgInADJ4vi9QIEhyGEkBW3M8SUGsty5IUpToqAA).
+
 ## Ensure a type
 
 In specific use cases where type information is awkward to apply and `as` casts are used, which introduce type vulnerabilities, here is a little function that ensures its input matches the given generic. This is essentially the same as an `as` cast but with stricter type requirements.
