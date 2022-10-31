@@ -1,5 +1,26 @@
 # typescript-snippets
 
+## Object's nested keys to Array
+
+This creates an array of an object's nested keys where each entry in the array determines which entries may follow. The first entry is the object's top level keys, the second entry is the object's nested keys of the value given in the first entry, and so on.
+
+So, [for example](https://www.typescriptlang.org/play?#code/C4TwDgpgBA8gRgKwgY2ANQIYBsCuEAq4EAPPlBAB7AQB2AJgM5QD2iKwAfFALxT4DaAawghmAMz4BdANwAoWaEhQAchAbU6AaRENi8JKgDitCACcAlsnJVajFm1Rde+9plwEixAN6yofqPwACqbMYFDmNFDCohIuRiYWyJIAXLAOwMY0ZpZBIWCS1tT0TKwGwL7+lQD8AcGhADRQAHQtABSq6hBaOnrpmdnIuaGSXAA+AZIAlJIVlX6pQ-lyAL4ccgpE1hgAtmBYEHHAhEq8XsxZqeoWNADmjcAA7sypXlmddJfA1zfLy+vI53UUGo6gYqQAShAMHRzlgQABBUymDAgYgdDTaEC6Sg7PYHdLHCAcJwBWYBADk5wg5Mk9TJ-HJj2YNLplQZTPJjXJbw0LLJAHp+VAAALABgAWkokFQkqRzFM9MpWU5UCV1NpAqFoolUvYspCCrZapVjKefMqgpFYslFGlwH18sVVJNGBoICgVwiN3N-kt2ptdodhv87LNXOdGotWutuplZgNio5XI5kd90Z1tr18cdRqTqp5XRNKbpMlkQA), with the object type `{one: string, two: {nested: string}}`, the only possible values for this nested key array are the following:
+  - `['one']`
+  - `['two']`
+  - `['two', 'nested']`
+
+```typescript
+type ObjectValueType<T extends object> = T[keyof T];
+
+type NestedKeys<ObjectGeneric extends object> = ObjectValueType<{
+    [Prop in keyof ObjectGeneric]: ObjectGeneric[Prop] extends object
+        ? [Prop, ...(NestedKeys<ObjectGeneric[Prop]> | [])]
+        : [Prop];
+}>;
+```
+
+[Playground example](https://www.typescriptlang.org/play?#code/C4TwDgpgBA8gRgKwgY2ANQIYBsCuEAq4EAPPlBAB7AQB2AJgM5QD2iKwAfFALxT4DaAawghmAMz4BdANwAoWaEhQAchAbU6AaRENi8JKgDitCACcAlsnJVajFm1Rde+9plwEixAN6yofqPwACqbMYFDmNFDCohIuRiYWyJIAXLAOwMY0ZpZBIWCS1tT0TKwGwL7+lQD8AcGhADRQAHQtABSq6hBaOnrpmdnIuaGSXAA+AZIAlJIVlX6pQ-lyAL4ccgpE1hgAtmBYEHHAhEq8PpXAoQAyEABuEFipODSCNMwA7jRylcxZ13dYABEIBAwKkznM-AwIgBzfYdDR1UFQJ4vd6fWZQZZffzAAAWpmBf3uDCBILBGMqWU6dBgWXJEIhVI0+DezHpDI5TK6+HxwPZHIFUDAeVpEEez1eH2xgo5wtCLLZyIlaOlMr8WIpDI1HO1-g1GtkyB+6ig1HUDFSACUIBg6D8sCAAIKmUwYEDEeFdbQgXSUHZ7A7pY4QDhOAIY-gAcguYCJWEjknqEcjPwgcdJYATScq-E1fhTv1u9wzkezDIA9OWoAABYAMAC0lEgqEbLuYpjzUALaaLgOBmbLfkTEc73fT-dLncrNbrjYozeArZCHY50auvcnlWHOdHqfHIM3DMjUJosIgnroiMPQ8HUGntYbTfYS-bI9Xe97JdvlUjXJpWWvKBt38XNVzxAke3+EkJ1vYC-FAo9wMJXtoIPb9-F-NQNFFQC4PDMDeUg4kvynKsHznBcXxXI8-wVXDbwQiFo0IuNUIHUc-xw9D81o1lAJ-WjCP4jC5TALiMTwxi5mYiDWJI1dOIA7iu145hhJ4rDuSE5TI1EujYIY0ckKIrA2PUlTNP-CBzMw6l9I4yyeQg8z71nJ8WzMZdRzoMx2K3W9XMfedn0818dwI2SUPko8TzPC8rx01SbME5yDNkGRZCAA)
+
 ## Ensure a type
 
 In specific use cases where type information is awkward to apply and `as` casts are used, which introduce type vulnerabilities, here is a little function that ensures its input matches the given generic. This is essentially the same as an `as` cast but with stricter type requirements.
