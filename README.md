@@ -13,8 +13,8 @@ So, for example, with the object type `{one: string, two: {nested: string}}`, th
 type ObjectValueType<T extends object> = T[keyof T];
 
 type NestedKeys<ObjectGeneric extends object> = ObjectValueType<{
-    [Prop in keyof ObjectGeneric]: ObjectGeneric[Prop] extends object
-        ? [Prop, ...(NestedKeys<ObjectGeneric[Prop]> | [])]
+    [Prop in keyof ObjectGeneric]: NonNullable<ObjectGeneric[Prop]> extends object
+        ? [Prop, ...(NestedKeys<NonNullable<ObjectGeneric[Prop]>> | [])]
         : [Prop];
 }>;
 ```
